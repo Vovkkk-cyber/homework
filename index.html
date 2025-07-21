@@ -8,7 +8,7 @@
 
   <body>
     <div class="container">
-      <ul class="comments">
+      <ul class="comments" id="comments">
         <li class="comment">
           <div class="comment-header">
             <div>Глеб Фокин</div>
@@ -49,23 +49,68 @@
           type="text"
           class="add-form-name"
           placeholder="Введите ваше имя"
+          id="name"
         />
         <textarea
           type="textarea"
           class="add-form-text"
           placeholder="Введите ваш коментарий"
           rows="4"
+          id="comment"
         ></textarea>
         <div class="add-form-row">
-          <button class="add-form-button">Написать</button>
+          <button class="add-form-button" id="button">Написать</button>
         </div>
       </div>
     </div>
   </body>
 
   <script>
-    "use strict";
-    // Код писать здесь
-    console.log("It works!");
+    const nameEl = document.getElementById("name");
+    const commentEl = document.getElementById("comment");
+    const buttonEl = document.getElementById("button");
+    const commentsEl = document.getElementById("comments");
+    const dateEl = new Date();
+    const options = {
+      year:'2-digit', month: 'numeric', day:'numeric',
+      hour: 'numeric', minute: 'numeric',
+    
+    }
+    buttonEl.addEventListener("click", () => {
+
+      nameEl.classList.remove("error");
+      commentEl.classList.remove("error");
+
+
+      if (nameEl.value === "") {
+        nameEl.classList.add("error");
+      }
+      if (commentEl.value === "") {
+        commentEl.classList.add("error");
+      }
+      if (nameEl.value === "" || commentEl.value === "") {
+        return;
+      }
+      
+
+      const oldHtml = commentsEl.innerHTML;
+
+      commentsEl.innerHTML = oldHtml + `<li class="comment">
+        <div class="comment-header">
+          <div>${nameEl.value}</div>
+          <div>${new Intl.DateTimeFormat('ru-RU', options).format(dateEl)}</div>
+          </div>
+          <div class="comment-body">
+            <div class="comment-text">
+              ${commentEl.value}
+            </div>
+          </div>
+          <div class="comment-footer">
+            <div class="likes">
+              <span class="likes-counter">0</span>
+              <button class="like-button -active-like"></button>
+            </div>
+          </div></li>`
+    })
   </script>
 </html>
