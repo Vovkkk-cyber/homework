@@ -62,9 +62,9 @@ function renderComments() {
 const commentHtml = comments.map(comment => {
       const classString = `like-button ${comment.liked ? "-active-like" : ""}`
       const newComment = `
-      <li class="comment">
+      <li data-id="${comment.id}" class="comment" >
         <div class="comment-header">
-          <div>${comment.name}</div>
+          <div class="comment-name">${comment.name}</div>
           <div>${comment.date}</div>
         </div>
         <div class="comment-body">
@@ -84,10 +84,13 @@ const commentHtml = comments.map(comment => {
     }).join("");
     commentsList.innerHTML = commentHtml;
     handleLikes();
+    addInitReplyListeners();
   }
 
     buttonEl.addEventListener("click", () => {
-
+    const name = nameEl.value.trim().replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+    const comment = commentEl.value.trim().replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+      
       nameEl.classList.remove("error");
       commentEl.classList.remove("error");
 
@@ -114,8 +117,8 @@ const commentHtml = comments.map(comment => {
 
       const newComment = {
       id: comments.length + 1,
-      name: nameEl.value,
-      text: commentEl.value,
+      name: name,
+      text: comment,
       date: dateString,
       likeCount: 0,
       liked: false
@@ -132,6 +135,7 @@ const commentHtml = comments.map(comment => {
     const likeButtons = document.querySelectorAll(".like-button");
     likeButtons.forEach((likeButton) => {
       likeButton.addEventListener("click", () => {
+        event.stopPropagation();
         const id = likeButton.dataset.id;
         const comment = comments.find((c) => c.id === +id);
 
@@ -148,6 +152,17 @@ const commentHtml = comments.map(comment => {
     })
   }
   renderComments();
+function addInitReplyListeners() {
+    document.querySelectorAll('.comment').forEach(comment => {
+      comment.addEventListener('click', () => {
+        const id = comment.dataset.id;
+        const currentComment = comments.find((c) => c.id === +id);
+        const addCommentTextInput = document.getElementById('comment');
+        addCommentTextInput.value = `${currentComment.name} > ${currentComment.text}`;
+        addCommentTextInput.focus();
+      });
+    })
+  }
 
   </script>
 </html>
