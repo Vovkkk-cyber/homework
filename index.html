@@ -1,168 +1,35 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-  <head>
-    <title>Проект "Комменты"</title>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="styles.css" />
-  </head>
+    <head>
+        <title>Проект "Комменты"</title>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="styles.css" />
+    </head>
 
-  <body>
-    <div class="container">
-      <ul class="comments" id="comments">
-        
-      </ul>
-      <div class="add-form">
-        <input
-          type="text"
-          class="add-form-name"
-          placeholder="Введите ваше имя"
-          id="name"
-        />
-        <textarea
-          type="textarea"
-          class="add-form-text"
-          placeholder="Введите ваш коментарий"
-          rows="4"
-          id="comment"
-        ></textarea>
-        <div class="add-form-row">
-          <button class="add-form-button" id="button">Написать</button>
+    <body>
+        <div class="container">
+            <ul class="comments" id="comments"></ul>
+            <div class="add-form">
+                <input
+                    type="text"
+                    class="add-form-name"
+                    placeholder="Введите ваше имя"
+                    id="name"
+                />
+                <textarea
+                    type="textarea"
+                    class="add-form-text"
+                    placeholder="Введите ваш коментарий"
+                    rows="4"
+                    id="comment"
+                ></textarea>
+                <div class="add-form-row">
+                    <button class="add-form-button" id="button">
+                        Написать
+                    </button>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </body>
-
-  <script>
-    const nameEl = document.getElementById("name");
-    const commentEl = document.getElementById("comment");
-    const buttonEl = document.getElementById("button");
-    const commentsList = document.getElementById("comments");
-
-    const comments = [
-    {
-      id: 1,
-      name: "Глеб Фокин",
-      date: "12.02.22 12:18",
-      text: "Это будет первый комментарий на этой странице",
-      likeCount: 3,
-      liked: true
-    },
-    {
-      id: 2,
-      name: "Варвара Н.",
-      date: "13.02.22 19:22",
-      text: "Мне нравится как оформлена эта страница! ❤",
-      likeCount: 75,
-      liked: false
-    }
-  ];
-
-function renderComments() {
-  commentsList.innerHTML = '';
-const commentHtml = comments.map(comment => {
-      const classString = `like-button ${comment.liked ? "-active-like" : ""}`
-      const newComment = `
-      <li data-id="${comment.id}" class="comment" >
-        <div class="comment-header">
-          <div class="comment-name">${comment.name}</div>
-          <div>${comment.date}</div>
-        </div>
-        <div class="comment-body">
-          <div class="comment-text">
-            ${comment.text}
-          </div>
-        </div>
-        <div class="comment-footer">
-          <div class="likes">
-            <span class="likes-counter">${comment.likeCount}</span>
-            <button data-id="${comment.id}" class="${classString}"></button>
-          </div>
-        </div>
-      </li>
-        `;
-      return newComment
-    }).join("");
-    commentsList.innerHTML = commentHtml;
-    handleLikes();
-    addInitReplyListeners();
-  }
-
-    buttonEl.addEventListener("click", () => {
-    const name = nameEl.value.trim().replaceAll("<", "&lt;").replaceAll(">", "&gt;");
-    const comment = commentEl.value.trim().replaceAll("<", "&lt;").replaceAll(">", "&gt;");
-      
-      nameEl.classList.remove("error");
-      commentEl.classList.remove("error");
-
-      if (nameEl.value === "") {
-        nameEl.classList.add("error");
-      }
-      if (commentEl.value === "") {
-        commentEl.classList.add("error");
-      }
-      if (nameEl.value === "" || commentEl.value === "") {
-        return;
-      }
-      
-      const now = new Date();
-    const options = {
-      year: 'numeric',
-      month: 'numeric',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: false
-    };
-    const dateString = now.toLocaleString('ru-RU', options).replace(',', '');
-
-      const newComment = {
-      id: comments.length + 1,
-      name: name,
-      text: comment,
-      date: dateString,
-      likeCount: 0,
-      liked: false
-    }
-        
-    comments.push(newComment);
-    console.log(comments);
-    renderComments();
-
-    })
-
-
-  function handleLikes() {
-    const likeButtons = document.querySelectorAll(".like-button");
-    likeButtons.forEach((likeButton) => {
-      likeButton.addEventListener("click", () => {
-        event.stopPropagation();
-        const id = likeButton.dataset.id;
-        const comment = comments.find((c) => c.id === +id);
-
-        if (comment.liked) {
-          comment.liked = false;
-          comment.likeCount -= 1;
-        } else {
-          comment.liked = true;
-          comment.likeCount += 1;
-        }
-
-        renderComments();
-      })
-    })
-  }
-  renderComments();
-function addInitReplyListeners() {
-    document.querySelectorAll('.comment').forEach(comment => {
-      comment.addEventListener('click', () => {
-        const id = comment.dataset.id;
-        const currentComment = comments.find((c) => c.id === +id);
-        const addCommentTextInput = document.getElementById('comment');
-        addCommentTextInput.value = `${currentComment.name} > ${currentComment.text}`;
-        addCommentTextInput.focus();
-      });
-    })
-  }
-
-  </script>
+    </body>
+    <script type="module" src="index.js"></script>
 </html>
