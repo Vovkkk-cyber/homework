@@ -1,11 +1,10 @@
 import { renderComments } from './renderComments.js'
 import { buttonEl } from './buttonEl.js'
+import { updateComments } from './coments.js'
+import { getComments } from './api.js'
 buttonEl
-renderComments()
-fetch('https://wedev-api.sky.pro/api/v1/:personal-key/comments')
-    .then((response) => {
-        return response.json()
-    })
-    .then((data) => {
-        console.log(data)
-    })
+
+getComments().then((data) => {
+    updateComments(data.comments);
+    renderComments();
+});
