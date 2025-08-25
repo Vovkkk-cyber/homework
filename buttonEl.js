@@ -1,6 +1,7 @@
 import { renderComments } from './renderComments.js'
 import { comments, updateComments } from './coments.js'
 import { getComments } from './api.js'
+import { postComments } from './api.js'
 
 export const buttonEl = document.getElementById('button')
 buttonEl.addEventListener('click', () => {
@@ -48,15 +49,10 @@ buttonEl.addEventListener('click', () => {
         liked: false,
     }
 
-    fetch("https://wedev-api.sky.pro/api/v1/vladimir-blindowscky/comments", {
-            method: "POST",
-            body: JSON.stringify(newComment),
+    postComments(comment, name).then(() => {
+        return getComments().then((data) => {
+            updateComments(data)
+            renderComments()
         })
-            .then(() => {
-                return getComments();
-            })
-            .then((data) => {
-                updateComments(data.comments);
-                renderComments();
-            });
+    })
 })

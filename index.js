@@ -5,6 +5,8 @@ import { getComments } from './api.js'
 buttonEl
 
 getComments().then((data) => {
-    updateComments(data.comments);
-    renderComments();
-});
+    updateComments(data.comments)
+    renderComments()
+})
+
+
