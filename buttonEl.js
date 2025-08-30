@@ -1,5 +1,7 @@
 import { renderComments } from './renderComments.js'
-import { comments } from './coments.js'
+import { comments, updateComments } from './coments.js'
+import { getComments } from './api.js'
+import { postComments } from './api.js'
 
 export const buttonEl = document.getElementById('button')
 buttonEl.addEventListener('click', () => {
@@ -47,7 +49,10 @@ buttonEl.addEventListener('click', () => {
         liked: false,
     }
 
-    comments.push(newComment)
-    console.log(comments)
-    renderComments()
+    postComments(comment, name).then(() => {
+        return getComments().then((data) => {
+            updateComments(data)
+            renderComments()
+        })
+    })
 })
