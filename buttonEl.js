@@ -1,12 +1,17 @@
 import { renderComments } from './renderComments.js'
-import { comments, updateComments } from './coments.js'
-import { getComments } from './api.js'
-import { postComments } from './api.js'
+import { updateComments } from './coments.js'
+import { getComments, postComments } from './api.js'
 
-export const buttonEl = document.getElementById('button')
-buttonEl.addEventListener('click', () => {
-    const nameEl = document.getElementById('name')
-    const commentEl = document.getElementById('comment')
+const buttonEl = document.getElementById('button')
+const nameEl = document.getElementById('name')
+const commentEl = document.getElementById('comment')
+const commentForm = document.getElementById('comment-form')
+const addCommentLoader = document.getElementById('add-comment-loader')
+
+export function initFormButtonListeners() {
+    buttonEl.addEventListener('click', handlePostClick)
+}
+const handlePostClick = () => {
     const name = nameEl.value
         .trim()
         .replaceAll('<', '&lt;')
@@ -29,30 +34,20 @@ buttonEl.addEventListener('click', () => {
         return
     }
 
-    const now = new Date()
-    const options = {
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        hour12: false,
-    }
-    const dateString = now.toLocaleString('ru-RU', options).replace(',', '')
+    commentForm.style.display = 'none'
+    addCommentLoader.style.display = 'block'
 
-    const newComment = {
-        id: comments.length + 1,
-        name: name,
-        text: comment,
-        date: dateString,
-        likeCount: 0,
-        liked: false,
-    }
-
-    postComments(comment, name).then(() => {
-        return getComments().then((data) => {
-            updateComments(data)
-            renderComments()
+    postComments(comment, name)
+        .then(() => {
+            return getComments().then((data) => {
+                updateComments(data)
+                renderComments()
+            })
         })
-    })
-})
+        .then(() => {
+            commentForm.style.display = 'flex'
+            addCommentLoader.style.display = 'none'
+            nameEl.value = ''
+            commentEl.value = ''
+        })
+}

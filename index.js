@@ -1,12 +1,13 @@
 import { renderComments } from './renderComments.js'
-import { buttonEl } from './buttonEl.js'
+import { initFormButtonListeners } from './buttonEl.js'
 import { updateComments } from './coments.js'
 import { getComments } from './api.js'
-buttonEl
+
+document.querySelector('.comments').innerHTML = 'Пожалуйста подождите...'
 
 getComments().then((data) => {
-    updateComments(data.comments)
+    updateComments(data)
     renderComments()
 })
 
-
+initFormButtonListeners()

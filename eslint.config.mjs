@@ -1,4 +1,4 @@
-import js from '@eslint/js'
+import pluginJs from '@eslint/js'
 import globals from 'globals'
 
 import config from 'eslint-config-prettier'
