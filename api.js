@@ -1,9 +1,14 @@
+const host = 'https://wedev-api.sky.pro/api/v1/vladimir-blindowscky'
+
 export const getComments = () => {
-    return fetch(
-        'https://wedev-api.sky.pro/api/v1/vladimir-blindowscky/comments',
-    )
+    return fetch(host + '/comments')
         .then((response) => {
-            return response.json()
+            if (response.status === 500) {
+                throw new Error('Ошибка сервера')
+            }
+            if (response.status === 200) {
+                return response.json()
+            }
         })
         .then((responseData) => {
             const appComments = responseData.comments.map((comment) => {
@@ -20,16 +25,24 @@ export const getComments = () => {
         })
 }
 export const postComments = (text, name) => {
-    return fetch(
-        'https://wedev-api.sky.pro/api/v1/vladimir-blindowscky/comments',
-        {
-            method: 'POST',
-            body: JSON.stringify({
-                text,
-                name,
-            }),
-        },
-    ).then((response) => {
-        return response.json()
+    return fetch(host + '/comments', {
+        method: 'POST',
+        body: JSON.stringify({
+            text,
+            name,
+            forceError: true,
+        }),
+    }).then((response) => {
+        if (response.status === 500) {
+            throw new Error('Ошибка сервера')
+        }
+
+        if (response.status === 400) {
+            throw new Error('Неверный запрос')
+        }
+
+        if (response.status === 201) {
+            return response.json()
+        }
     })
 }
