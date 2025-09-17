@@ -2,16 +2,16 @@ import { renderComments } from './renderComments.js'
 import { updateComments } from './coments.js'
 import { getComments, postComments } from './api.js'
 
-const buttonEl = document.getElementById('button')
-const nameEl = document.getElementById('name')
-const commentEl = document.getElementById('comment')
-const commentForm = document.getElementById('comment-form')
-const addCommentLoader = document.getElementById('add-comment-loader')
-
 export function initFormButtonListeners() {
+    const buttonEl = document.getElementById('button')
     buttonEl.addEventListener('click', handlePostClick)
 }
 const handlePostClick = () => {
+    const nameEl = document.getElementById('name')
+    const commentEl = document.getElementById('comment')
+    const commentForm = document.getElementById('comment-form')
+    const addCommentLoader = document.getElementById('add-comment-loader')
+
     const name = nameEl.value
         .trim()
         .replaceAll('<', '&lt;')
