@@ -50,4 +50,20 @@ const handlePostClick = () => {
             nameEl.value = ''
             commentEl.value = ''
         })
+        .catch((error) => {
+            commentForm.style.display = 'flex'
+            addCommentLoader.style.display = 'none'
+
+            if (error.message === 'Failed to fetch') {
+                alert('Нет интернета, попробуйте снова')
+            }
+
+            if (error.message === 'Неверный запрос') {
+                alert('Имя и комментарий должны быть не короче 3х символов')
+            }
+
+            if (error.message === 'Ошибка сервера') {
+                handlePostClick()
+            }
+        })
 }
