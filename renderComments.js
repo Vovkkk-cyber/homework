@@ -1,10 +1,13 @@
 import { comments } from './coments.js'
+import { name, token } from './api.js'
 import { handleLikes, addInitReplyListeners } from './handler.js'
+import { renderLogin } from './renderLogin.js'
+import { initFormButtonListeners } from './buttonEl.js'
 
 export function renderComments() {
-    const commentsList = document.getElementById('comments')
-    commentsList.innerHTML = ''
-    const commentHtml = comments
+    const container = document.querySelector('.container')
+
+    const commentsHtml = comments
         .map((comment) => {
             const classString = `like-button ${comment.isLiked ? '-active-like' : ''}`
             const newComment = `
@@ -29,7 +32,53 @@ export function renderComments() {
             return newComment
         })
         .join('')
-    commentsList.innerHTML = commentHtml
-    handleLikes()
-    addInitReplyListeners()
+    const addCommentsHtml = `
+            <div id="comment-form" class="add-form">
+                <input
+                    type="text"
+                    class="add-form-name"
+                    placeholder="Введите ваше имя"
+                    readonly
+                    value="${name}"
+                    id="name"
+                />
+                <textarea
+                    type="textarea"
+                    class="add-form-text"
+                    placeholder="Введите ваш коментарий"
+                    rows="4"
+                    id="comment"
+                ></textarea>
+                <div class="add-form-row">
+                    <button class="add-form-button" id="button">
+                        Написать
+                    </button>
+                </div>
+            </div>
+            <div
+                id="add-comment-loader"
+                style="display: none; margin-top: 20px"
+            >
+                Комментарий добавляется...
+            </div>
+    `
+
+    const linkToLoginText = `<p>чтобы отправить комментарий, <span class="link-login">войдите</span></p>`
+
+    const baseHtml = `
+      <ul class="comments" id="comments-list">${commentsHtml}</ul>
+      ${token ? addCommentsHtml : linkToLoginText}
+    `
+
+    container.innerHTML = baseHtml
+
+    if (token) {
+        handleLikes()
+        addInitReplyListeners()
+        initFormButtonListeners()
+    } else {
+        document.querySelector('.link-login').addEventListener('click', () => {
+            renderLogin()
+        })
+    }
 }

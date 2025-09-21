@@ -1,20 +1,24 @@
 import { renderComments } from './renderComments.js'
-import { initFormButtonListeners } from './buttonEl.js'
 import { updateComments } from './coments.js'
 import { getComments } from './api.js'
 
-document.querySelector('.comments').innerHTML = 'Пожалуйста подождите...'
+export const fetchAndRenderComments = (isFirstLoading) => {
+    if (isFirstLoading) {
+        document.querySelector('.container').innerHTML =
+            `<p>Пожалуйста подождите, загружаю комментарии...</p>`
+    }
 
-getComments()
-    .then((data) => {
-        updateComments(data)
-        renderComments()
-    })
-    .catch((error) => {
-        if (error.message === 'Ошибка сервера') {
-            return alert('Ошибка на нашей стороне, поробуйте позже')
-        }
-        alert(error.message)
-    })
+    getComments()
+        .then((data) => {
+            updateComments(data)
+            renderComments()
+        })
+        .catch((error) => {
+            if (error.message === 'Ошибка сервера') {
+                return alert('Ошибка на нашей стороне, поробуйте позже')
+            }
+            alert(error.message)
+        })
+}
 
-initFormButtonListeners()
+fetchAndRenderComments(true)
