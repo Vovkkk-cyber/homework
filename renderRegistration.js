@@ -31,9 +31,9 @@ export const renderRegistration = () => {
         required
       />
       <fieldset class="add-form-registry">
-        <button class="add-form-button-main button-main" type="submit">
+        <button class="add-form-button button-main" type="submit">
             Зарегестрироваться</button>
-        <u class="add-form-button-link entry">
+        <u class="add-form-button entry">
             Войти
         </u>
       </fieldset>

@@ -1,4 +1,4 @@
-
+/* eslint-disable prettier/prettier */
 import { fetchAndRenderComments } from './index.js'
 import { login, setName, setToken } from './api.js'
 import { renderRegistration } from './renderRegistration.js'
@@ -24,9 +24,9 @@ export const renderLogin = () => {
         required
       />
       <fieldset class="add-form-registry">
-        <button class="add-form-button-main button-main" type="submit">
+        <button class="add-form-button button-main" type="submit">
             Войти</button>
-        <button class="add-form-button-link registry">
+        <button class="add-form-button registry">
             Зарегестрироваться
         </button>
       </fieldset>
@@ -49,6 +49,10 @@ export const renderLogin = () => {
                 return response.json()
             })
             .then((data) => {
+              if (data.error) {
+                    alert(`Ошибка. ${data.error}`)
+                }
+                
                 setToken(data.user.token)
                 setName(data.user.name)
                 fetchAndRenderComments()
